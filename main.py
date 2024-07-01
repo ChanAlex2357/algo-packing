@@ -1,5 +1,5 @@
 import Packing1D as p1d
-from objects import PackingObject1D
+from objects.PackingObject1D import PackingObject1D
 
 objects = []
 

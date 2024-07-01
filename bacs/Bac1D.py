@@ -9,11 +9,12 @@ class Bac1D  (Bac) :
 #Functions
     def check_free_space(self,obj:PackingObject1D):
         free_space = self.get_free_space()
-        object_taille = obj.get_taille()
-        if ( free_space - object_taille ) < 0 :
+        object_size = obj.get_size()
+        
+        if ( free_space - object_size ) < 0 :
             raise IncompatibleBacException()
            
     def add_object(self,obj:PackingObject1D):
         super().add_object(obj)
         # Mettre a jour
-        self.set_free_space(self.get_free_space() - obj.get_taille())
+        self.set_free_space(self.get_free_space() - obj.get_size())
