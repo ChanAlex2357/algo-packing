@@ -36,3 +36,6 @@ def worstFit1D( B:int , objects:list):
                 # Exception si l'objet ne peut entrer dans aucune bac
                 pass
     return bacs
+
+def brute_force(B:int , objects:list):
+    print("Brute force")
