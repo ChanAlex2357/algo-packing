@@ -1,6 +1,7 @@
-from bacs import Bac1D
-from objects import PackingObject1D
+from bacs.Bac1D import Bac1D
+from objects.PackingObject1D import PackingObject1D
 from packingException import IncompatibleBacException
+
 def worstFit1D( B:int , objects:list):
     '''
         Insérer chaque objet dans le bac qui laissera le plus d’espace restant après
@@ -19,6 +20,7 @@ def worstFit1D( B:int , objects:list):
     num_bac = 1
     bacs.append(Bac1D(B,num_bac))
     for packing_object in objects:
+        bacs = sorted(bacs,key=lambda bac : bac.get_free_space(),reverse=True)
         added = False
         for bac in bacs:
             try:
@@ -36,3 +38,7 @@ def worstFit1D( B:int , objects:list):
             except IncompatibleBacException :
                 # Exception si l'objet ne peut entrer dans aucune bac
                 pass
+    return bacs
+
+def brute_force(B:int , objects:list):
+    print("Brute force")
