@@ -26,7 +26,6 @@ def next_fit_decreasing_height(width,height,objects:list):
             if packing_object.get_height() >= current_height:
                 # Throws exception si c'esp pas Decreasing
                 raise IncompatibleBacException
-            # Aj
             current_bac.add_object(packing_object)
         except IncompatibleBacException:
             # Exception si l'objet ne rentre pas dans le bac ou ne suit pas le format Decreasing
