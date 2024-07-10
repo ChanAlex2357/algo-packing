@@ -2,7 +2,7 @@ from bacs.Bac1D import Bac1D
 from objects.PackingObject1D import PackingObject1D
 from packingException import IncompatibleBacException
 
-def worstFit1D( B:int , objects:list):
+def worst_fit( B:int , objects:list):
     '''
         Insérer chaque objet dans le bac qui laissera le plus d’espace restant après
         insertion
@@ -40,12 +40,14 @@ def worstFit1D( B:int , objects:list):
                 pass
     return bacs
 
-def firstFit1D(B: int, objects: list):
+def first_fit(B: int, objects: list):
     '''
         Insérer chaque objet dans le premier bac disponible où il peut rentrer
         ARGS:
             - B : la longueur des bacs sur un axe
             - objects : la liste des objets a inserer correspondant a une taille si chacun
+        RETURN : 
+            - La liste des bacs utiliser pour faire le packing
     '''
     bacs = []
     num_bac = 1
