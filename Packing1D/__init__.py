@@ -45,7 +45,7 @@ def firstFit1D(B: int, objects: list):
         added = False
         for bac in bacs:
             try:
-                bac.add_object_FF(packing_object)
+                bac.add_object(packing_object)
                 added = True
                 break
             except IncompatibleBacException:
