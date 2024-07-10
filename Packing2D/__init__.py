@@ -11,5 +11,5 @@ def NextFitDecreasingHeight(width,height,objects:list):
     '''
     bacs = []
     bac_num = 1
-    bacs.append(Bac2D(width,height,num_bac))
+    # bacs.append(Bac2D(width,height,num_bac))
     
