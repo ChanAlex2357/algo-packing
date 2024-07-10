@@ -38,6 +38,13 @@ def worstFit1D( B:int , objects:list):
     return bacs
 
 def firstFit1D(B: int, objects: list):
+    '''
+        Insérer chaque objet dans le premier bac disponible où il peut rentrer
+
+        ARGS:
+            - B : la longueur des bacs sur un axe
+            - objects : la liste des objets a inserer correspondant a une taille si chacun
+    '''
     bacs = []
     num_bac = 1
     bacs.append(Bac1D(B, num_bac))
