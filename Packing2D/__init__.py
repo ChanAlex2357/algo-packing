@@ -4,7 +4,7 @@ def next_fit_decreasing_height(width,height,objects:list):
     '''
         Fait le 2D packing des objets dans des boites de taille width x hight
         Suivant l'algo Next Fit Decreasing Height (NFDH) qui consite a garder le
-        dernier bac et le remplir tant que les objets sont en decreasing hheight
+        dernier bac et le remplir tant que les objets sont en decreasing height
         ARGS :
             - la longueur des bacs
             - la hauteur des bacs
@@ -41,3 +41,16 @@ def next_fit_decreasing_height(width,height,objects:list):
         # Le height de reference devient celui de l'objet ajoutee
         current_height = packing_object.get_height()
     return bacs
+
+def  first_fit_decreasing_height(width,height,objects:list):
+        '''
+        Fait le 2D packing des objets dans des boites de taille width x hight
+        Suivant l'algo Next Fit Decreasing Height (NFDH) qui consite a garder le
+        dernier bac et le remplir tant que les objets sont en decreasing height
+        ARGS :
+            - la longueur des bacs
+            - la hauteur des bacs
+            - la liste des objets a faire entrer dans des boites
+        RETURN :
+            - La liste des bacs utiliser pour le packing
+    '''
