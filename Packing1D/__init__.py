@@ -37,6 +37,30 @@ def worstFit1D( B:int , objects:list):
                 pass
     return bacs
 
+def firstFit1D(B: int, objects: list):
+    bacs = []
+    num_bac = 1
+    bacs.append(Bac1D(B, num_bac))
+    for packing_object in objects:
+        added = False
+        for bac in bacs:
+            try:
+                bac.add_object_FF(packing_object)
+                added = True
+                break
+            except IncompatibleBacException:
+                added = False
+        if not added:
+            num_bac += 1
+            new_bac = Bac1D(B, num_bac)
+            try:
+                new_bac.add_object(packing_object)
+                bacs.append(new_bac)
+            except IncompatibleBacException:
+                pass
+    return bacs
+
+
 
 def brute_force(B:int , objects:list):
     print("Brute force")
