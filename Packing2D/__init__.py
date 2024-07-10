@@ -1,5 +1,5 @@
 from bacs.Bac2D import Bac2D
-def NextFitDecreasingHeight(width,height,objects:list):
+def next_fit_decreasing_height(width,height,objects:list):
     '''
         Fait le 2D packing des objets dans des boites de taille width x hight
         ARGS :
