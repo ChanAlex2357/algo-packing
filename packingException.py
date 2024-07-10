@@ -1,2 +1,0 @@
-class IncompatibleBacException (Exception):
-    pass
