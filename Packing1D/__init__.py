@@ -40,12 +40,42 @@ def worst_fit( B:int , objects:list):
                 pass
     return bacs
 
+def first_fit(B: int, objects: list):
+    '''
+        Insérer chaque objet dans le premier bac disponible où il peut rentrer
+        ARGS:
+            - B : la longueur des bacs sur un axe
+            - objects : la liste des objets a inserer correspondant a une taille si chacun
+        RETURN : 
+            - La liste des bacs utiliser pour faire le packing
+    '''
+    bacs = []
+    num_bac = 1
+    bacs.append(Bac1D(B, num_bac))
+    for packing_object in objects:
+        added = False
+        for bac in bacs:
+            try:
+                bac.add_object(packing_object)
+                added = True
+                break
+            except IncompatibleBacException:
+                added = False
+        if not added:
+            num_bac += 1
+            new_bac = Bac1D(B, num_bac)
+            try:
+                new_bac.add_object(packing_object)
+                bacs.append(new_bac)
+            except IncompatibleBacException:
+                pass
+    return bacs
+
 def best_fit(B: int, objects: list):
     '''
         Insérer chaque objet dans le bac qui laissera le moins d’espace restant après
         insertion
         Les objets seront associes directement a un bac a par l'attribut num_bac , et ajouter au liste des objets de bac
-
         ARGS:
             - B : la longueur des bacs sur un axe
             - objects : la liste des objets a inserer correspondant a une taille si chacun
@@ -65,6 +95,7 @@ def best_fit(B: int, objects: list):
                 bac.add_object(packing_object)
                 added = True
                 break
+
             except IncompatibleBacException :
                 added = False
         if not added :
