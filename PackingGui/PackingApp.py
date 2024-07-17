@@ -25,7 +25,7 @@ class PackingApp:
 
         # Create a dropdown (combobox) for selecting shapes
         self.shape_selector = ttk.Combobox(self.entry_frame, textvariable=self.shape_var)
-        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute Force")
+        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute","2D-Rotation")
         self.shape_selector.pack()
         # Width entry
         tk.Label(self.entry_frame, text="Width:").pack(side=tk.LEFT)
@@ -143,8 +143,15 @@ class PackingApp:
                     self.show_objects()
                 except Exception:
                     print (Exception)
-            elif shape == "2D-Brute Force":
+            elif shape == "2D-Brute":
                 self.rectangle.reset_objects()
+                try:
+                    # Brute Force
+                    pd2.brute_force()
+                    self.show_objects()
+
+                except Exception:
+                    print(Exception)
         except Exception:
             print (Exception)
 
