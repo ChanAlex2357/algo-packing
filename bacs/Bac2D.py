@@ -58,7 +58,6 @@ class Bac2D  (Bac) :
     def add_object(self,obj:PackingObject2D,fw:bool=False,fh:bool=False):
         # Mettre a jour les espaces libres
         self.check_free_space(obj,fw,fh)
-        
         super().add_object(obj,False)
 
     def reset_free_space(self):
