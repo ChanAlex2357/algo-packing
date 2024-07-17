@@ -70,5 +70,3 @@ class Bac2D  (Bac) :
     def get_free_area(self):
         return self.get_free_height() * self.get_free_width()
     
-
-

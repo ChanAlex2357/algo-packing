@@ -182,20 +182,60 @@ def brute_force(width, height, objects:list):
     for packing_object in objects:
         added = False
 
-        for bac in bacs:
-            try:
-                bac.add_object(packing_object,True,False)
-                added = True
-                break
-            except IncompatibleBacException:
-                added = False
+        try:
+            bacs[-1].add_object(packing_object,fw=True, fh=False)
+            added = True
+            break
+        except IncompatibleBacException:
+            added = False
 
-            if not added:
-                num_bac += 1
-                new_bac = Bac2D(width,height,num_bac)
-                try:
-                    new_bac.add_object(packing_object)
-                    bacs.append(new_bac)
-                except IncompatibleBacException:
-                    pass
+        if not added:
+            num_bac += 1
+            new_bac = Bac2D(width,height,num_bac)
+            try:
+                new_bac.add_object(packing_object)
+                bacs.append(new_bac)
+            except IncompatibleBacException:
+                pass
+
+    return bacs
+
+def brute_force_with_rotation(width, height, objects: list):
+    '''
+    Algorithme de packing consistant à faire rentrer les objets (width*height) dans des bacs
+    en laissant la moindre surface disponible dans le bac, avec rotation des objets.
+        - longueur des bacs
+        - hauteur des bacs
+        - listes des objets
+    RETURN:
+        - liste des bacs utilisés 
+    '''
+    # liste des bacs
+    bacs = []
+    # numéro du bac actuel, initialisé à 1
+    num_bac = 1
+    bacs.append(Bac2D(width, height, num_bac))
+
+    for packing_object in objects:
+        added = False
+
+        try:
+            if (packing_object.get_height()>packing_object.get_width):
+                packing_object.rotation()
+                
+            bacs[-1].add_object(packing_object, fw=True, fh=False)
+            added = True
+            break
+        except IncompatibleBacException:
+            added = False
+
+        if not added:
+            num_bac += 1
+            new_bac = Bac2D(width, height, num_bac)
+            try:
+                new_bac.add_object(packing_object, fw=True, fh=False)
+                bacs.append(new_bac)
+            except IncompatibleBacException:
+                pass
+
     return bacs

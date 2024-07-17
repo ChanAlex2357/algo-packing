@@ -18,3 +18,4 @@ class Bac1D  (Bac) :
         super().add_object(obj)
         # Mettre a jour
         self.set_free_space(self.get_free_space() - obj.get_size())
+
