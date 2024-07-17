@@ -21,11 +21,11 @@ class PackingApp:
 
     def init_entry(self):
         # Create a variable for the shape
-        self.shape_var = tk.StringVar(value="2D-BF")
+        self.shape_var = tk.StringVar(value="2D-BruteRotation")
 
         # Create a dropdown (combobox) for selecting shapes
         self.shape_selector = ttk.Combobox(self.entry_frame, textvariable=self.shape_var)
-        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute Force")
+        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute","2D-BruteRotation")
         self.shape_selector.pack()
         # Width entry
         tk.Label(self.entry_frame, text="Width:").pack(side=tk.LEFT)
@@ -137,16 +137,23 @@ class PackingApp:
             
             elif shape == "2D-BF":
                 self.rectangle.reset_objects()
-                try :
-                    # Best Fit
-                    pd2.best_fit(self.objects, self.rectangle)
-                    self.show_objects()
-                except Exception:
-                    print (Exception)
-            elif shape == "2D-Brute Force":
+                # Best Fit
+                pd2.best_fit(self.objects, self.rectangle)
+                self.show_objects()
+            elif shape == "2D-Brute":
                 self.rectangle.reset_objects()
+                # Brute Force
+                bacs = pd2.brute_force(self.rectangle.get_width(),self.rectangle.get_height(),self.objects)
+                self.rectangle.load_objects_from_bacs(bacs)
+                self.show_objects()
+            elif shape == "2D-BruteRotation":
+                self.rectangle.reset_objects()
+                # Brute Force
+                bacs = pd2.brute_force_with_rotation(self.rectangle.get_width(),self.rectangle.get_height(),self.objects)
+                self.rectangle.load_objects_from_bacs(bacs)
+                self.show_objects()
         except Exception:
-            print (Exception)
+            print(Exception)
 
 
             
