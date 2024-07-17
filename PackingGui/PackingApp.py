@@ -21,11 +21,11 @@ class PackingApp:
 
     def init_entry(self):
         # Create a variable for the shape
-        self.shape_var = tk.StringVar(value="NFDH")
+        self.shape_var = tk.StringVar(value="2D-BF")
 
         # Create a dropdown (combobox) for selecting shapes
         self.shape_selector = ttk.Combobox(self.entry_frame, textvariable=self.shape_var)
-        self.shape_selector['values'] = ("NFDH")
+        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute Force")
         self.shape_selector.pack()
         # Width entry
         tk.Label(self.entry_frame, text="Width:").pack(side=tk.LEFT)
@@ -106,26 +106,50 @@ class PackingApp:
         tk.Button(button_frame, text="Move Up", command=self.move_up).pack(side=tk.LEFT)
         tk.Button(button_frame, text="Move Down", command=self.move_down).pack(side=tk.LEFT)
 
+    def show_objects(self , color:str='gray'):
+        for obj in self.rectangle.get_objects():
+            x, y = obj.get_coordinate()
+            width, height = obj.get_width(), obj.get_height()
+            self.canvas.create_rectangle(x, y, x + width, y + height, fill=color)
+            # print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
+
     def draw_shape(self, event=None):        
         # Get the selected shape
         shape = self.shape_var.get()
 
         # Drawing rectangle
         self.draw_rect()
-
-        # NEXT FIT DECREASING HEIGHT
-        if shape ==  "NFDH":
-            self.rectangle.reset_objects()
-            # print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
-            try :
+        try :
+            # NEXT FIT DECREASING HEIGHT
+            if shape ==  "2D-NFDH":
+                self.rectangle.reset_objects()
+                # print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
+                # NFDH
                 pd2.next_fit_decreasing_height(self.objects, self.rectangle)
-                for obj in self.rectangle.get_objects():
-                    x, y = obj.get_coordinate()
-                    width, height = obj.get_width(), obj.get_height()
-                    self.canvas.create_rectangle(x, y, x + width, y + height, fill='gray')
-                    print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
-            except Exception:
-                print (Exception)
+                self.show_objects()
+    
+            # FIRST FIT DECREASING HEIGHT
+            elif shape == "2D-FFDH":
+                self.rectangle.reset_objects()
+                # FFDH
+                pd2.first_fit_decreasing_height(self.objects, self.rectangle)
+                self.show_objects()
+            
+            elif shape == "2D-BF":
+                self.rectangle.reset_objects()
+                try :
+                    # Best Fit
+                    pd2.best_fit(self.objects, self.rectangle)
+                    self.show_objects()
+                except Exception:
+                    print (Exception)
+            elif shape == "2D-Brute Force":
+                self.rectangle.reset_objects()
+        except Exception:
+            print (Exception)
+
+
+            
 
     def add_object(self):
         try:

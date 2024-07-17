@@ -26,7 +26,7 @@ def next_fit_placement(rectangle:Rectangle2D,packing_object:PackingObject2D,curr
         raise IncompatibleBacException
     # Placement de l'objet
     x = place_object(rectangle,packing_object,x,y,fh=fh)
-    return x 
+    return x
 def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     '''
         Fait le 2D packing des objets dans des boites de taille width x hight
@@ -81,7 +81,7 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
         
     return objects
  
-def best_fit(width, height, objects:list):
+def best_fit(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     '''
         Algorithme de packing consistant a faire rentrer les objets (width*height) dans des bacs
         en laissant la moindre surface disponible dans le bac
@@ -95,8 +95,8 @@ def best_fit(width, height, objects:list):
     bacs = []
     # numero du bac actuel, initialisé a 1
     num_bac = 1
-    bacs.append(Bac2D(width,height,num_bac))
-
+    bacs.append(rectangle.generate_bac(objects[0].get_height(),num_bac))
+    cumul = 0
     for packing_object in objects:
         # Trier les bacs en fonction de la surface disponible
         bacs = sorted(bacs, key=lambda bac : bac.get_free_area(), reverse=False)
@@ -104,23 +104,27 @@ def best_fit(width, height, objects:list):
 
         for bac in bacs:
             try:
-                bac.add_object(packing_object)
+                bac.add_object(packing_object,fw=True)
                 added = True
+                cumul += packing_object.get_width()
                 break
             except IncompatibleBacException:
                 added = False
 
-            if not added:
-                num_bac += 1
-                new_bac = Bac2D(width,height,num_bac)
-                try:
-                    new_bac.add_object(packing_object)
-                    bacs.append(new_bac)
-                except IncompatibleBacException:
-                    pass
-    return bacs
+        if not added:
+            num_bac += 1
+            new_bac = rectangle.generate_bac(packing_object.get_height(),num_bac)
+            cumul = 0 
+            try:
+                new_bac.add_object(packing_object,fw=True)
+                bacs.append(new_bac)
+                cumul += packing_object.get_width()
+            except IncompatibleBacException:
+                pass
+    rectangle.load_objects_from_bacs(bacs)
+    # return bacs
 
-def first_fit_decreasing_height(width, height, objects):
+def first_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     '''
     Place les objets rectangulaires dans des boîtes de taille width x height
     en utilisant l'algorithme First Fit Decreasing Height (FFDH).
@@ -128,7 +132,7 @@ def first_fit_decreasing_height(width, height, objects):
     ARGS :
         - width : largeur des boîtes
         - height : hauteur des boîtes
-        - objects : liste des objets à placer dans les boîtes (doivent être triés par hauteur décroissante)
+        - objects : liste des objets à placer darectangle.get_ns les boîtes (doivent être triés par hauteur décroissante)
         
     RETURN :
         - La liste des bacs utilisés pour le packing
@@ -140,24 +144,24 @@ def first_fit_decreasing_height(width, height, objects):
     current_bac_num = 1     # Numéro du premier bac
     
     # Création du premier bac
-    current_bac = Bac2D(width, height, current_bac_num)
+    current_bac = rectangle.generate_bac(objects_sorted[0].get_height(),current_bac_num)
     bacs.append(current_bac)
     
     for obj in objects_sorted:
         try:
             # Ajouter l'objet au bac courant
-            current_bac.add_object(obj)
+            current_bac.add_object(obj,fw=True)
         except IncompatibleBacException:
             # Si l'objet ne peut pas être ajouté au bac courant, créer un nouveau bac
             current_bac_num += 1
-            current_bac = Bac2D(width, height, current_bac_num)
+            current_bac = rectangle.generate_bac(obj.get_height(), current_bac_num)
             try:
-                current_bac.add_object(obj)
+                current_bac.add_object(obj,fw=True)
+                bacs.append(current_bac)
             except IncompatibleBacException:
                 # Gérer le cas où l'objet ne peut être ajouté à aucun bac
                 pass
-    
-    return bacs
+    rectangle.load_objects_from_bacs(bacs)
 
 def brute_force(width, height, objects:list):
     '''
