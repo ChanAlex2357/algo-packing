@@ -44,15 +44,14 @@ class Rectangle2D(Bac2D):
             for obj in bac.get_objects():
                 try:
                     self.add_object(obj,fw=True,fh=y_placement)
-                    if y_placement:
-                        base_object = obj
-                        y_placement=False
+                    y_placement=False
                     obj.set_coordinate(x_base,y_base)
                     x_base = p2d.change_x_base(x_base,obj)
                 except Exception:
                     print(Exception)
                     pass
             self.reset_free_width()
+            objects_sorted = sorted(bac.get_objects(), key=lambda obj: obj.get_height(), reverse=True)
             x_base = self.get_x()
-            y_base = p2d.change_y_base(y_base,base_object)
+            y_base = p2d.change_y_base(y_base,objects_sorted[0])
             print("--------------------------------------------")

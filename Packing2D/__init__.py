@@ -180,20 +180,13 @@ def brute_force(width, height, objects:list):
     bacs.append(Bac2D(width,height,num_bac))
 
     for packing_object in objects:
-        added = False
-
         try:
             bacs[-1].add_object(packing_object,fw=True, fh=False)
-            added = True
-            break
         except IncompatibleBacException:
-            added = False
-
-        if not added:
             num_bac += 1
             new_bac = Bac2D(width,height,num_bac)
             try:
-                new_bac.add_object(packing_object)
+                new_bac.add_object(packing_object,True)
                 bacs.append(new_bac)
             except IncompatibleBacException:
                 pass
@@ -210,31 +203,22 @@ def brute_force_with_rotation(width, height, objects: list):
         - liste des bacs utilisés 
     '''
     # liste des bacs
-    bacs = []
+    bacs_list = []
     # numéro du bac actuel, initialisé à 1
     num_bac = 1
-    bacs.append(Bac2D(width, height, num_bac))
+    bacs_list.append(Bac2D(width, height, num_bac))
 
     for packing_object in objects:
-        added = False
-
         try:
-            if (packing_object.get_height()>packing_object.get_width):
-                packing_object.rotation()
-                
-            bacs[-1].add_object(packing_object, fw=True, fh=False)
-            added = True
-            break
+            if (packing_object.get_height()>packing_object.get_width()):
+                packing_object.do_rotation()
+            bacs_list[-1].add_object(packing_object, fw=True, fh=False)
         except IncompatibleBacException:
-            added = False
-
-        if not added:
             num_bac += 1
             new_bac = Bac2D(width, height, num_bac)
             try:
-                new_bac.add_object(packing_object, fw=True, fh=False)
-                bacs.append(new_bac)
+                new_bac.add_object(packing_object,True)
+                bacs_list.append(new_bac)
             except IncompatibleBacException:
-                pass
-
-    return bacs
+                print("Not possible to add anymore")
+    return bacs_list
