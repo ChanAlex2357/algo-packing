@@ -79,4 +79,24 @@ def best_fit(B: int, objects: list):
     return bacs
 
 def brute_force(B:int , objects:list):
-    print("Brute force")
+    # la liste des bacs
+    bacs = []
+    # Initialiser avec le bac numero 1
+    num_bac = 1
+    bacs.append(Bac1D(B,num_bac))
+    for packing_object in objects:
+        added = False
+        try:
+            bacs[-1].add_object(packing_object)
+            added = True
+            break
+        except IncompatibleBacException :
+            num_bac+=1
+            new_bac = Bac1D(B,num_bac)
+            try:
+                new_bac.add_object(packing_object)
+                bacs.append(new_bac)
+            except IncompatibleBacException :
+                # Exception si l'objet ne peut entrer dans aucune bac
+                pass
+    return bacs
