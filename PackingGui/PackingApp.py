@@ -1,4 +1,5 @@
 import tkinter as tk
+import Packing2D as pd2 
 from tkinter import ttk
 from bacs.Rectangle2D import  Rectangle2D
 
@@ -10,8 +11,9 @@ class PackingApp:
         self.init_canvas(root,width,height)
         self.init_entry()
         self.init_binding()
-        self.rectangle = None
+        self.rectangle = Rectangle2D(50,50,width,height)
         # Initial drawing
+        self.objects = objects
         self.draw_shape()
 
     def init_entry(self):
@@ -48,37 +50,52 @@ class PackingApp:
         self.width_entry.bind("<KeyRelease>", self.draw_shape)
         self.height_entry.bind("<KeyRelease>", self.draw_shape)
 
-    def draw_rect(self)->Rectangle2D:
-        # Get the dimensions of the rectangle from the entries
+    def clear_canvas(self):
+        self.canvas.delete("all")
+    def draw_rect(self,reset=True)->Rectangle2D:
+        # Get the dimensions of the rectangle from the 
+        marge_x,marge_y = 50,50
+        if reset :
+            self.clear_canvas()
         try:
             rect_width = int(self.width_entry.get())
+        except ValueError:
+            rect_width = self.rectangle.get_width() - marge_x
+        try:
             rect_height = int(self.height_entry.get())
         except ValueError:
-            rect_width = 200
-            rect_height = 100
+            rect_height = self.rectangle.get_height() - marge_y
         
         # Calculate the coordinates of the rectangle
-        rect_x1, rect_y1 = 50, 50
+        rect_x1, rect_y1 = marge_x, marge_y
         rect_x2 = rect_x1 + rect_width
         rect_y2 = rect_y1 + rect_height
         
         # Draw the rectangle
         self.canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2, outline='black', width=2)
-        
-        # Calculate the center of the rectangle
-        center_x = (rect_x1 + rect_x2) // 2
-        center_y = (rect_y1 + rect_y2) // 2
-        
-        self.rectangle = Rectangle2D(rect_x1,rect_y1,rect_x2,rect_y2)
+        self.rectangle = Rectangle2D(rect_x1,rect_y1,rect_width,rect_height)
 
-    def draw_shape(self, event=None):
-        # Clear the canvas
-        self.canvas.delete("all")
-        
+    def draw_shape(self, event=None):        
         # Get the selected shape
         shape = self.shape_var.get()
 
         # Drawing rectangle
-        
+        self.draw_rect()
+
         if shape ==  "NFDH":
+            self.rectangle.reset_objects()
+            print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
+            try :
+                pd2.next_fit_decreasing_height(self.objects, self.rectangle)
+                for obj in self.rectangle.get_objects():
+                    if obj.get_placement_status():
+                        color = 'blue'
+                    else:
+                        color = 'orange' 
+                    x, y = obj.get_coordinate()
+                    width, height = obj.get_width(), obj.get_height()
+                    self.canvas.create_rectangle(x, y, x + width, y + height, fill=color)
+                    print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
+            except Exception:
+                print (Exception)
         

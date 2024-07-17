@@ -7,10 +7,10 @@ objects = [
     PackingObject2D(100, 200),
     PackingObject2D(200, 150),
     PackingObject2D(150, 300),
-    PackingObject2D(300, 100),
-    PackingObject2D(120, 180)
+    PackingObject2D(120, 180),
+    PackingObject2D(300, 100)
 ]
 
 root = tk.Tk()
-app = PackingApp(root,objects)
+app = PackingApp(root,objects=objects)
 root.mainloop()
