@@ -10,7 +10,9 @@ def place_objects_heuristically(objects, canvas_width, canvas_height):
         placed = False
 
         if isinstance(obj, Rectangle):
+            # teste chaque rotation 
             for rotation in [(obj.width, obj.height), (obj.height, obj.width)]:
+
                 for x in range(canvas_width):
                     for y in range(canvas_height):
                         obj.height = rotation[1]
@@ -25,6 +27,7 @@ def place_objects_heuristically(objects, canvas_width, canvas_height):
                     break
 
         elif isinstance(obj, Triangle):
+            # teste chaque rotation
             for rotation in [(obj.base, obj.height), (obj.height, obj.base)]:
                 for x in range(canvas_width):
                     for y in range(canvas_height):
