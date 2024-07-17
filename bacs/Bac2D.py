@@ -30,17 +30,25 @@ class Bac2D  (Bac) :
         self._free_width=self.get_width()
 
     def check_free_space(self,obj:PackingObject2D):
+        pass
+    def check_placement_width(self,obj:PackingObject2D):
         # Verifier si l'objet peut entrer en hauteur et en largeur
-        if (obj.get_height() > self.get_free_height()) or (obj.get_width() > self.get_free_width()):
+        if (obj.get_height() > self.get_height()) or (obj.get_width() > self.get_free_width()):
+            raise IncompatibleBacException()
+    def check_placement_height(self,obj:PackingObject2D):
+        # Verifier si l'objet peut entrer en hauteur et en largeur
+        if (obj.get_height() > self.get_free_height()) or (obj.get_width() > self.get_width()):
             raise IncompatibleBacException()
 
     def add_object(self,obj:PackingObject2D,fw:bool=False,fh:bool=False):
         super().add_object(obj)
         # Mettre a jour les espaces libres
         if fh :
+            self.check_placement_height()
             reste_height = self.get_free_height() - obj.get_height()
             self.set_free_height(reste_height)
         if fw :
+            self.check_placement_width()
             reste_width = self.get_free_width() - obj.get_width()
             self.set_free_width(reste_width)
     def reset_free_space(self):
