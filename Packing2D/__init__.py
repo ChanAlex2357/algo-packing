@@ -4,7 +4,7 @@ def next_fit_decreasing_height(width,height,objects:list):
     '''
         Fait le 2D packing des objets dans des boites de taille width x hight
         Suivant l'algo Next Fit Decreasing Height (NFDH) qui consite a garder le
-        dernier bac et le remplir tant que les objets sont en decreasing hheight
+        dernier bac et le remplir tant que les objets sont en decreasing height
         ARGS :
             - la longueur des bacs
             - la hauteur des bacs
@@ -79,4 +79,43 @@ def best_fit(width, height, objects:list):
                     bacs.append(new_bac)
                 except IncompatibleBacException:
                     pass
+    return bacs
+
+def first_fit_decreasing_height(width, height, objects):
+    '''
+    Place les objets rectangulaires dans des boîtes de taille width x height
+    en utilisant l'algorithme First Fit Decreasing Height (FFDH).
+    
+    ARGS :
+        - width : largeur des boîtes
+        - height : hauteur des boîtes
+        - objects : liste des objets à placer dans les boîtes (doivent être triés par hauteur décroissante)
+        
+    RETURN :
+        - La liste des bacs utilisés pour le packing
+    '''
+    # Tri des objets par hauteur décroissante
+    objects_sorted = sorted(objects, key=lambda obj: obj.get_height(), reverse=True)
+    
+    bacs = []               # Liste des bacs utilisés
+    current_bac_num = 1     # Numéro du premier bac
+    
+    # Création du premier bac
+    current_bac = Bac2D(width, height, current_bac_num)
+    bacs.append(current_bac)
+    
+    for obj in objects_sorted:
+        try:
+            # Ajouter l'objet au bac courant
+            current_bac.add_object(obj)
+        except IncompatibleBacException:
+            # Si l'objet ne peut pas être ajouté au bac courant, créer un nouveau bac
+            current_bac_num += 1
+            current_bac = Bac2D(width, height, current_bac_num)
+            try:
+                current_bac.add_object(obj)
+            except IncompatibleBacException:
+                # Gérer le cas où l'objet ne peut être ajouté à aucun bac
+                pass
+    
     return bacs
