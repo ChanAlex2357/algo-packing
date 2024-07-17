@@ -137,21 +137,14 @@ class PackingApp:
             
             elif shape == "2D-BF":
                 self.rectangle.reset_objects()
-                try :
-                    # Best Fit
-                    pd2.best_fit(self.objects, self.rectangle)
-                    self.show_objects()
-                except Exception:
-                    print (Exception)
+                # Best Fit
+                pd2.best_fit(self.objects, self.rectangle)
+                self.show_objects()
             elif shape == "2D-Brute":
                 self.rectangle.reset_objects()
-                try:
-                    # Brute Force
-                    pd2.brute_force()
-                    self.show_objects()
-
-                except Exception:
-                    print(Exception)
+                # Brute Force
+                pd2.brute_force()
+                self.show_objects()
         except Exception:
             print (Exception)
 
