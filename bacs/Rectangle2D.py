@@ -32,11 +32,24 @@ class Rectangle2D(Bac2D):
         return Bac2D(self.get_width(),height,num_bac)
     
     def load_objects_from_bacs(self,bacs):
+        import Packing2D as p2d
+
         x_base = self.get_x()
         y_base = self.get_y()
+        base_object = None
         for bac in bacs:
-
-
-
-        
-        pass
+            y_placement = True
+            print(f"\t\tNUM {bac.get_num_bac()}")
+            for obj in bac.get_objects():
+                try:
+                    self.add_object(obj,fw=True,fh=y_placement)
+                    if y_placement:
+                        base_object = obj
+                        y_placement=False
+                    obj.set_coordinate(x_base,y_base)
+                    x_base = p2d.change_x_base(x_base,obj)
+                except Exception:
+                    pass
+            self.reset_free_width()
+            x_base = self.get_x()
+            y_base = p2d.change_y_base(y_base,base_object)

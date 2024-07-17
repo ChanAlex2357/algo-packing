@@ -26,7 +26,7 @@ def next_fit_placement(rectangle:Rectangle2D,packing_object:PackingObject2D,curr
         raise IncompatibleBacException
     # Placement de l'objet
     x = place_object(rectangle,packing_object,x,y,fh=fh)
-    return x 
+    return x
 def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     '''
         Fait le 2D packing des objets dans des boites de taille width x hight
@@ -124,7 +124,8 @@ def best_fit(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
                 print(f"num= {num_bac} ; {cumul}")
             except IncompatibleBacException:
                 pass
-    return bacs
+    rectangle.load_objects_from_bacs(bacs)
+    # return bacs
 
 def first_fit_decreasing_height(width, height, objects):
     '''
