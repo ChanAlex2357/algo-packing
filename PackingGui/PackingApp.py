@@ -1,24 +1,31 @@
 import tkinter as tk
+import Packing2D as pd2 
 from tkinter import ttk
+from bacs.Rectangle2D import  Rectangle2D
+from objects.PackingObject2D import PackingObject2D
 
 class PackingApp:
-    def __init__(self, root,width:int=1280,height:int=720):
+    def __init__(self, root,width:int=1280,height:int=720,objects:list=[]):
         self.root = root
-        self.root.title("Shape Selector")
+        self.rectangle = Rectangle2D(50,50,width-50,height-50)
+        self.root.title("2D Packing")
         self.init_frame_entry(root)
+        self.init_object_form(root)
         self.init_canvas(root,width,height)
         self.init_entry()
         self.init_binding()
         # Initial drawing
+        self.objects = objects
+        self.update_treeview()
         self.draw_shape()
 
     def init_entry(self):
         # Create a variable for the shape
-        self.shape_var = tk.StringVar(value="Circle")
+        self.shape_var = tk.StringVar(value="NFDH")
 
         # Create a dropdown (combobox) for selecting shapes
         self.shape_selector = ttk.Combobox(self.entry_frame, textvariable=self.shape_var)
-        self.shape_selector['values'] = ("Circle", "Square", "Triangle")
+        self.shape_selector['values'] = ("NFDH")
         self.shape_selector.pack()
         # Width entry
         tk.Label(self.entry_frame, text="Width:").pack(side=tk.LEFT)
@@ -46,45 +53,114 @@ class PackingApp:
         self.width_entry.bind("<KeyRelease>", self.draw_shape)
         self.height_entry.bind("<KeyRelease>", self.draw_shape)
 
-        
-    def draw_shape(self, event=None):
-        # Clear the canvas
+    def clear_canvas(self):
         self.canvas.delete("all")
-        
-        # Get the selected shape
-        shape = self.shape_var.get()
-        
-        # Get the dimensions of the rectangle from the entries
+    def draw_rect(self,reset=True)->Rectangle2D:
+        # Get the dimensions of the rectangle from the 
+        marge_x,marge_y = 50,50
+        if reset :
+            self.clear_canvas()
         try:
             rect_width = int(self.width_entry.get())
+        except ValueError:
+            rect_width = self.rectangle.get_width()
+        try:
             rect_height = int(self.height_entry.get())
         except ValueError:
-            rect_width = 200
-            rect_height = 100
+            rect_height = self.rectangle.get_height()
         
         # Calculate the coordinates of the rectangle
-        rect_x1, rect_y1 = 50, 50
+        rect_x1, rect_y1 = marge_x, marge_y
         rect_x2 = rect_x1 + rect_width
         rect_y2 = rect_y1 + rect_height
         
         # Draw the rectangle
         self.canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2, outline='black', width=2)
-        
-        # Calculate the center of the rectangle
-        center_x = (rect_x1 + rect_x2) // 2
-        center_y = (rect_y1 + rect_y2) // 2
-        
-        if shape == "Circle":
-            radius = 30
-            self.canvas.create_oval(center_x - radius, center_y - radius, center_x + radius, center_y + radius, fill='blue')
-        elif shape == "Square":
-            side = 60
-            self.canvas.create_rectangle(center_x - side // 2, center_y - side // 2, center_x + side // 2, center_y + side // 2, fill='green')
-        elif shape == "Triangle":
-            side = 60
-            points = [
-                center_x, center_y - side // 2,
-                center_x - side // 2, center_y + side // 2,
-                center_x + side // 2, center_y + side // 2
-            ]
-            self.canvas.create_polygon(points, fill='red')
+        self.rectangle = Rectangle2D(rect_x1,rect_y1,rect_width,rect_height)
+    def init_object_form(self,root):
+        # Frame for adding objects
+        form_frame = tk.Frame(root)
+        form_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+        tk.Label(form_frame, text="Add Packing Object").pack()
+
+        tk.Label(form_frame, text="Width:").pack()
+        self.new_width_entry = tk.Entry(form_frame)
+        self.new_width_entry.pack()
+
+        tk.Label(form_frame, text="Height:").pack()
+        self.new_height_entry = tk.Entry(form_frame)
+        self.new_height_entry.pack()
+
+        tk.Button(form_frame, text="Add Object", command=self.add_object).pack()
+        # Treeview to display the list of objects
+        self.tree = ttk.Treeview(form_frame, columns=("Width", "Height"), show='headings')
+        self.tree.heading("Width", text="Width")
+        self.tree.heading("Height", text="Height")
+        self.tree.pack()
+
+        # Buttons to change the order of the objects
+        button_frame = tk.Frame(form_frame)
+        button_frame.pack()
+
+        tk.Button(button_frame, text="Move Up", command=self.move_up).pack(side=tk.LEFT)
+        tk.Button(button_frame, text="Move Down", command=self.move_down).pack(side=tk.LEFT)
+
+    def draw_shape(self, event=None):        
+        # Get the selected shape
+        shape = self.shape_var.get()
+
+        # Drawing rectangle
+        self.draw_rect()
+
+        # NEXT FIT DECREASING HEIGHT
+        if shape ==  "NFDH":
+            self.rectangle.reset_objects()
+            # print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
+            try :
+                pd2.next_fit_decreasing_height(self.objects, self.rectangle)
+                for obj in self.rectangle.get_objects():
+                    x, y = obj.get_coordinate()
+                    width, height = obj.get_width(), obj.get_height()
+                    self.canvas.create_rectangle(x, y, x + width, y + height, fill='gray')
+                    print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
+            except Exception:
+                print (Exception)
+
+    def add_object(self):
+        try:
+            width = int(self.new_width_entry.get())
+            height = int(self.new_height_entry.get())
+            new_object = PackingObject2D(width, height)
+            self.objects.append(new_object)
+            self.update_treeview()
+            self.draw_shape()
+        except ValueError:
+            print("Invalid width or height")
+
+    def update_treeview(self):
+        # Clear the treeview
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+        # Add all objects to the treeview
+        for obj in self.objects:
+            self.tree.insert('', 'end', values=(obj.get_width(), obj.get_height()))
+
+    def move_up(self):
+        selected_item = self.tree.selection()
+        if selected_item:
+            index = self.tree.index(selected_item[0])
+            if index > 0:
+                self.objects[index], self.objects[index - 1] = self.objects[index - 1], self.objects[index]
+                self.update_treeview()
+                self.draw_shape()
+
+    def move_down(self):
+        selected_item = self.tree.selection()
+        if selected_item:
+            index = self.tree.index(selected_item[0])
+            if index < len(self.objects) - 1:
+                self.objects[index], self.objects[index + 1] = self.objects[index + 1], self.objects[index]
+                self.update_treeview()
+                self.draw_shape()
