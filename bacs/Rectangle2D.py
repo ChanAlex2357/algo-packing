@@ -20,3 +20,7 @@ class Rectangle2D(Bac2D):
         self.set_y(y)
     def get_coordinate(self):
         return self.get_x(),self.get_y()
+    def get_center_x(self):
+        return (self.get_x() + self.get_width()) // 2
+    def get_center_y(self):
+        return (self.get_y() + self.get_height()) // 2

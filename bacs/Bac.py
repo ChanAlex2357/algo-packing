@@ -1,4 +1,4 @@
-from objects import PackingObject
+from objects.PackingObject import PackingObject
 from packingException import IncompatibleBacException
 class Bac :
     def __init__(self,width:int,height:int,numBac:int):
@@ -47,12 +47,20 @@ class Bac :
     def check_free_space(self,obj:PackingObject):
         raise IncompatibleBacException()
 
-    def add_object(self,obj:PackingObject):
+    def reset_objects(self):
+        for obj in self.get_objects():
+            obj.reset_placement()
+        self.set_objects(list())
+    def add_object(self,obj:PackingObject,check=True):
         '''
             Ajoute un objet dans le bac
         '''
-        self.check_free_space(obj)
+        # Si on doit faire un check
+        if check :
+            self.check_free_space(obj)
         # ajouter dans la liste des objets
         self.get_objects().append(obj)
         # Designer le bac avec son num dans l'objet ajouter
-        obj.set_numbac( self.get_num_bac())
+        obj.set_numbac(self.get_num_bac())
+        
+        obj.placed()

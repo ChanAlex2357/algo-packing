@@ -2,7 +2,17 @@ class PackingObject :
     def __init__(self,width,height):
         self.set_width(width)
         self.set_height(height)
+        self.reset_placement()
+
+    def reset_placement(self):
+        self.unplaced()
         self.set_numbac(0)
+    def get_placement_status(self):
+        return self._placed
+    def placed(self):
+        self._placed = True
+    def unplaced(self):
+        self._placed = False
 
     def __str__(self):
         return f" W:{self.get_width()} | H:{self.get_height()} | NumBac:{self.get_numbac()} \n"

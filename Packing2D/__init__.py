@@ -21,7 +21,8 @@ def next_fit_placement(rectangle:Rectangle2D,packing_object:PackingObject2D,curr
     # Verifier si c'est un Decreasing height
     if packing_object.get_height() >= current_height:
         # Throws exception si c'esp pas Decreasing
-        print(f"height passed {packing_object.get_height()} >= {current_height}")
+        packing_object.unplaced()
+        packing_object.set_coordinate(0,0)
         raise IncompatibleBacException
     # Placement de l'objet
     x = place_object(rectangle,packing_object,x,y,fh=fh)
@@ -38,10 +39,14 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
         RETURN :
             - La liste des bacs utiliser pour le packing
     '''
+    # Coordonnee de depart sur le coin du rectangle
     x,y = rectangle.get_coordinate()
     bac_num = 1     # Le numero du premier bac 
+    # La hauteur de reference
     current_height = rectangle.get_height()
+    # L'objet de base de la reference
     base_object = None
+    # on change le la hauteur libre
     fh = True
 
     # Determier le bac pour chaque objet
@@ -51,12 +56,16 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
             if fh :
                 base_object = packing_object
                 fh = False
+            # Le height de reference devient celui de l'objet ajoutee
+            current_height = packing_object.get_height()
         except IncompatibleBacException:
             # Exception si l'objet ne rentre pas dans le bac ou ne suit pas le format Decreasing
             # Alors Creation d'un nouveau bac
             bac_num += 1
             rectangle.reset_free_width()
-            change_y_base(y,base_object)
+            current_height = rectangle.get_free_height()
+            x = rectangle.get_x()
+            y = change_y_base(y,base_object)
             fh = True
 
             try:
@@ -64,11 +73,12 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
                 if fh :
                     base_object = packing_object
                     fh = False
+                # Le height de reference devient celui de l'objet ajoutee
+                current_height = packing_object.get_height()
             except IncompatibleBacException :
                 # Exception si l'objet ne peut rentrer dans aucun bac
-                pass
-        # Le height de reference devient celui de l'objet ajoutee
-        current_height = packing_object.get_height()
+                packing_object
+        
     return objects
  
 def best_fit(width, height, objects:list):
