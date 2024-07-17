@@ -107,13 +107,11 @@ def best_fit(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
                 bac.add_object(packing_object,fw=True)
                 added = True
                 cumul += packing_object.get_width()
-                print(f"num= {num_bac} ; {cumul}/{bac.get_width()}")
                 break
             except IncompatibleBacException:
                 added = False
 
         if not added:
-            print('not added')
             num_bac += 1
             new_bac = rectangle.generate_bac(packing_object.get_height(),num_bac)
             cumul = 0 
@@ -121,7 +119,6 @@ def best_fit(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
                 new_bac.add_object(packing_object,fw=True)
                 bacs.append(new_bac)
                 cumul += packing_object.get_width()
-                print(f"num= {num_bac} ; {cumul}")
             except IncompatibleBacException:
                 pass
     rectangle.load_objects_from_bacs(bacs)
@@ -135,7 +132,7 @@ def first_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0
     ARGS :
         - width : largeur des boîtes
         - height : hauteur des boîtes
-        - objects : liste des objets à placer dans les boîtes (doivent être triés par hauteur décroissante)
+        - objects : liste des objets à placer darectangle.get_ns les boîtes (doivent être triés par hauteur décroissante)
         
     RETURN :
         - La liste des bacs utilisés pour le packing
@@ -164,7 +161,6 @@ def first_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0
                 # Gérer le cas où l'objet ne peut être ajouté à aucun bac
                 pass
     rectangle.load_objects_from_bacs(bacs)
-    return bacs
 
 def brute_force(width, height, objects:list):
     '''
