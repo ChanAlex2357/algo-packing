@@ -3,13 +3,14 @@ from packingException import IncompatibleBacException
 from objects.Cercle import Cercle
 from objects.Triangle import Triangle
 from objects.Rectangle import Rectangle
+from objects.PackingObject2D import PackingObject2D
 
 def brute_force(objects, canvas_width, canvas_height):
     placed_objects = []
     for obj in objects:
         placed = False
 
-        if isinstance(obj, Rectangle):
+        if isinstance(obj,PackingObject2D):
             # teste chaque rotation 
             for rotation in [(obj.width, obj.height), (obj.height, obj.width)]:
 
@@ -18,7 +19,9 @@ def brute_force(objects, canvas_width, canvas_height):
                         obj.height = rotation[1]
                         obj.width = rotation[0]
                         if obj.can_be_placed(placed_objects, x, y, canvas_width, canvas_height):
-                            placed_objects.append((x, y, Rectangle(rotation[0], rotation[1])))
+                            rect = Rectangle(rotation[0], rotation[1])
+                            rect.set_coordinate(x,y)
+                            placed_objects.append(rect)
                             placed = True
                             break
                     if placed:
@@ -34,7 +37,9 @@ def brute_force(objects, canvas_width, canvas_height):
                         obj.height = rotation[1]
                         obj.base = rotation[0]
                         if obj.can_be_placed(placed_objects, x, y, canvas_width, canvas_height):
-                            placed_objects.append((x, y, Triangle(rotation[0], rotation[1])))
+                            triangle = Triangle(rotation[0], rotation[1])
+                            triangle.set_coordinate(x,y)
+                            placed_objects.append(triangle)
                             placed = True
                             break
                     if placed:
@@ -46,7 +51,7 @@ def brute_force(objects, canvas_width, canvas_height):
             for x in range(canvas_width):
                 for y in range(canvas_height):
                     if obj.can_be_placed(placed_objects, x, y, canvas_width, canvas_height):
-                        placed_objects.append((x, y, obj))
+                        placed_objects.append(obj.set_coordinate(x,y))
                         placed = True
                         break
                 if placed:
@@ -64,11 +69,12 @@ def placer_objet(objects, bac_width, bac_height):
     for obj in objects:
         placed = False
 
-        if isinstance(obj, Rectangle):
+        if isinstance(obj,PackingObject2D):
             for rotation in [(obj.width, obj.height), (obj.height, obj.width)]:
                 obj.width, obj.height = rotation
                 if obj.can_be_placed(placed_objects, last_x, last_y, bac_width, bac_height):
-                    placed_objects.append((last_x, last_y, Rectangle(obj.width, obj.height)))
+                    obj.set_coordinate(last_x, last_y)
+                    placed_objects.append(obj)
                     last_x += obj.width
 
                     # check si il faut changer d'etage
@@ -82,7 +88,8 @@ def placer_objet(objects, bac_width, bac_height):
             for rotation in [(obj.base, obj.height), (obj.height, obj.base)]:
                 obj.base, obj.height = rotation
                 if obj.can_be_placed(placed_objects, last_x, last_y, bac_width, bac_height):
-                    placed_objects.append((last_x, last_y, Triangle(obj.base, obj.height)))
+                    obj.set_coordinate(last_x, last_y)
+                    placed_objects.append(obj)
                     last_x += obj.base
 
                     if last_x >= bac_width:
@@ -93,7 +100,8 @@ def placer_objet(objects, bac_width, bac_height):
         else:
             
             if obj.can_be_placed(placed_objects, last_x, last_y, bac_width, bac_height):
-                placed_objects.append((last_x, last_y, obj))
+                obj.set_coordinate(last_x,last_y)
+                placed_objects.append(obj)
                 last_x += obj.radius*2
                 if last_x >= bac_width:
                     last_x = 0
