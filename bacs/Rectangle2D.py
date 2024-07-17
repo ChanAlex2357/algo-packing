@@ -38,6 +38,7 @@ class Rectangle2D(Bac2D):
         y_base = self.get_y()
         base_object = None
         for bac in bacs:
+            # Condition pour prendre comme reference pour le prochain placement des objets du prochain bac
             y_placement = True
             print(f"\t\tNUM {bac.get_num_bac()}")
             for obj in bac.get_objects():
