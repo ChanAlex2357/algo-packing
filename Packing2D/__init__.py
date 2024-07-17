@@ -3,15 +3,16 @@ from bacs.Rectangle2D import Rectangle2D
 from objects.PackingObject2D import PackingObject2D
 from packingException import IncompatibleBacException
 
-def place_object(bac:Bac2D,packing_object:PackingObject2D,x,y,fw=True,fh=False):
+def place_object(bac:Bac2D,packing_object:PackingObject2D,x,y,fw=True,fh=False) -> int:
     bac.add_object(packing_object,fw,fh)
     # Attribuer un coordonne a l'objet
     packing_object.set_coordinate(x,y)
     # Retourner les nouvelles coordonnees de base
-    return change_x_base(x,packing_object ) , y
+    return change_x_base(x,packing_object)
 
-def change_x_base(x,packing_object:PackingObject2D):
-    return x + packing_object.get_width()
+def change_x_base(x,packing_object:PackingObject2D)->int:
+    x += packing_object.get_width()
+    return x 
 
 def change_y_base(y,packing_object:PackingObject2D):
     return y + packing_object.get_height()
@@ -20,6 +21,7 @@ def next_fit_placement(rectangle:Rectangle2D,packing_object:PackingObject2D,curr
     # Verifier si c'est un Decreasing height
     if packing_object.get_height() >= current_height:
         # Throws exception si c'esp pas Decreasing
+        print(f"height passed {packing_object.get_height()} >= {current_height}")
         raise IncompatibleBacException
     # Placement de l'objet
     x = place_object(rectangle,packing_object,x,y,fh=fh)
@@ -35,13 +37,10 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
             - la liste des objets a faire entrer dans des boites
         RETURN :
             - La liste des bacs utiliser pour le packing
-    '''    
-    width = rectangle.get_width()
-    height = rectangle.get_height()
+    '''
     x,y = rectangle.get_coordinate()
-    bacs = []       # La liste des bacs
     bac_num = 1     # Le numero du premier bac 
-    current_height = 0
+    current_height = rectangle.get_height()
     base_object = None
     fh = True
 
@@ -70,6 +69,7 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
                 pass
         # Le height de reference devient celui de l'objet ajoutee
         current_height = packing_object.get_height()
+    return objects
  
 def best_fit(width, height, objects:list):
     '''

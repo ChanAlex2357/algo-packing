@@ -1,9 +1,9 @@
 from .Bac2D import Bac2D
 
 class Rectangle2D(Bac2D):
-    def __init__(self,x,y, width: int, height: int, num_bac: int):
+    def __init__(self,x:int,y:int, width: int, height: int, num_bac: int =1):
         super().__init__(width, height, num_bac)
-        self.set_coordinate(0,0)
+        self.set_coordinate(x,y)
 
     def set_x(self,x:int):
         self._x = x
