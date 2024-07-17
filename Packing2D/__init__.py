@@ -1,5 +1,6 @@
 from bacs.Bac2D import Bac2D
 from packingException import IncompatibleBacException
+
 def next_fit_decreasing_height(width,height,objects:list):
     '''
         Fait le 2D packing des objets dans des boites de taille width x hight
