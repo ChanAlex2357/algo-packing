@@ -58,6 +58,8 @@ class Bac2D  (Bac) :
         self.set_free_width(reste_width)
     
     def add_object(self,obj:PackingObject2D,fw:bool=False,fh:bool=False):
+        if not fw and not fh:
+            raise Exception("Vous n'avez specifiez aucun changement dans la taille du bac2D lors de l'ajout d'objet")
         # Mettre a jour les espaces libres
         self.check_free_space(obj,fw,fh)
         super().add_object(obj,False)

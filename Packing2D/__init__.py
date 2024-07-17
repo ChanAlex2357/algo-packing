@@ -127,7 +127,7 @@ def best_fit(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     rectangle.load_objects_from_bacs(bacs)
     # return bacs
 
-def first_fit_decreasing_height(width, height, objects):
+def first_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     '''
     Place les objets rectangulaires dans des boîtes de taille width x height
     en utilisant l'algorithme First Fit Decreasing Height (FFDH).
@@ -147,23 +147,23 @@ def first_fit_decreasing_height(width, height, objects):
     current_bac_num = 1     # Numéro du premier bac
     
     # Création du premier bac
-    current_bac = Bac2D(width, height, current_bac_num)
+    current_bac = rectangle.generate_bac(objects_sorted[0].get_height(),current_bac_num)
     bacs.append(current_bac)
     
     for obj in objects_sorted:
         try:
             # Ajouter l'objet au bac courant
-            current_bac.add_object(obj)
+            current_bac.add_object(obj,fw=True)
         except IncompatibleBacException:
             # Si l'objet ne peut pas être ajouté au bac courant, créer un nouveau bac
             current_bac_num += 1
-            current_bac = Bac2D(width, height, current_bac_num)
+            current_bac = rectangle.generate_bac(obj.get_height(), current_bac_num)
             try:
-                current_bac.add_object(obj)
+                current_bac.add_object(obj,True)
             except IncompatibleBacException:
                 # Gérer le cas où l'objet ne peut être ajouté à aucun bac
                 pass
-    
+    rectangle.load_objects_from_bacs(bacs)
     return bacs
 
 def brute_force(width, height, objects:list):
