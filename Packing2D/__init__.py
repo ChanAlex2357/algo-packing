@@ -56,7 +56,10 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
             # Alors Creation d'un nouveau bac
             bac_num += 1
             rectangle.reset_free_width()
-            change_y_base(y,base_object)
+            current_height = rectangle.get_free_height()
+            x = rectangle.get_x()
+            y = change_y_base(y,base_object)
+            print(f"y change ->{y}")
             fh = True
 
             try:
