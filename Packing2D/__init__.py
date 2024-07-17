@@ -185,3 +185,5 @@ def brute_force(width, height, objects:list):
                 except IncompatibleBacException:
                     pass
     return bacs
+
+def brute_force_with_Rotation(width, height, objects:list):
