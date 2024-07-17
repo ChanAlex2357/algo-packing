@@ -37,4 +37,8 @@ class Bac2D  (Bac) :
         self.set_free_height(reste_height)
         self.set_free_width(reste_width)
 
+    def get_free_area(self):
+        return self.get_free_height() * self.get_free_width()
+    
+
 
