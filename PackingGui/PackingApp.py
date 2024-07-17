@@ -108,10 +108,8 @@ class PackingApp:
 
     def show_objects(self , color:str='gray'):
         for obj in self.rectangle.get_objects():
-            x, y = obj.get_coordinate()
-            width, height = obj.get_width(), obj.get_height()
-            self.canvas.create_rectangle(x, y, x + width, y + height, fill=color)
-            # print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
+            obj.draw()
+            print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
 
     def draw_shape(self, event=None):        
         # Get the selected shape

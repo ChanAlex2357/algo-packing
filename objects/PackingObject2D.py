@@ -25,3 +25,8 @@ class PackingObject2D (PackingObject) :
         temp = self.get_height()
         self.set_height(self.get_width())
         self.set_width(temp)
+
+    def draw(self,canvas,color='gray'):
+        x, y = self.get_coordinate()
+        width, height = self.get_width(), self.get_height()
+        canvas.create_rectangle(x, y, x + width, y + height, fill=color)
