@@ -113,19 +113,16 @@ class PackingApp:
         # Drawing rectangle
         self.draw_rect()
 
+        # NEXT FIT DECREASING HEIGHT
         if shape ==  "NFDH":
             self.rectangle.reset_objects()
-            print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
+            # print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
             try :
                 pd2.next_fit_decreasing_height(self.objects, self.rectangle)
                 for obj in self.rectangle.get_objects():
-                    if obj.get_placement_status():
-                        color = 'blue'
-                    else:
-                        color = 'orange' 
                     x, y = obj.get_coordinate()
                     width, height = obj.get_width(), obj.get_height()
-                    self.canvas.create_rectangle(x, y, x + width, y + height, fill=color)
+                    self.canvas.create_rectangle(x, y, x + width, y + height, fill='gray')
                     print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
             except Exception:
                 print (Exception)
