@@ -39,7 +39,7 @@ class Bac2D  (Bac) :
 
     def check_placement_width(self,obj:PackingObject2D):
         # Verifier si l'objet peut entrer en hauteur et en largeur
-        if (obj.get_height() > self.get_height()) or (obj.get_width() > self.get_free_width()):
+        if (obj.get_height() > self.get_height())  or (obj.get_width() > self.get_free_width()):
             raise IncompatibleBacException()
     
     def check_placement_height(self,obj:PackingObject2D):
@@ -66,5 +66,3 @@ class Bac2D  (Bac) :
     def get_free_area(self):
         return self.get_free_height() * self.get_free_width()
     
-
-
