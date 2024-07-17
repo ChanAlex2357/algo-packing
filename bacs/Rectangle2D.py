@@ -24,3 +24,6 @@ class Rectangle2D(Bac2D):
         return (self.get_x() + self.get_width()) // 2
     def get_center_y(self):
         return (self.get_y() + self.get_height()) // 2
+    
+    def load_objects_from_bacs(self,bacs):
+        pass

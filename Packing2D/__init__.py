@@ -180,7 +180,7 @@ def brute_force(width, height, objects:list):
 
         for bac in bacs:
             try:
-                bac.add_object(packing_object,true,false)
+                bac.add_object(packing_object,True,False)
                 added = True
                 break
             except IncompatibleBacException:
