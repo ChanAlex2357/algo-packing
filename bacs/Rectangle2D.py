@@ -50,7 +50,9 @@ class Rectangle2D(Bac2D):
                     obj.set_coordinate(x_base,y_base)
                     x_base = p2d.change_x_base(x_base,obj)
                 except Exception:
+                    print(Exception)
                     pass
             self.reset_free_width()
             x_base = self.get_x()
             y_base = p2d.change_y_base(y_base,base_object)
+            print("--------------------------------------------")

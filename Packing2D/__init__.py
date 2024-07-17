@@ -157,6 +157,7 @@ def first_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0
             current_bac = rectangle.generate_bac(obj.get_height(), current_bac_num)
             try:
                 current_bac.add_object(obj,fw=True)
+                bacs.append(current_bac)
             except IncompatibleBacException:
                 # Gérer le cas où l'objet ne peut être ajouté à aucun bac
                 pass
