@@ -24,6 +24,19 @@ class Rectangle2D(Bac2D):
         return (self.get_x() + self.get_width()) // 2
     def get_center_y(self):
         return (self.get_y() + self.get_height()) // 2
+    def generate_bac(self,height:int=0,num_bac:int=0):
+        if num_bac == 0:
+            num_bac = self.get_num_bac()
+        if height == 0:
+            height = self.get_height()
+        return Bac2D(self.get_width(),height,num_bac)
     
     def load_objects_from_bacs(self,bacs):
+        x_base = self.get_x()
+        y_base = self.get_y()
+        for bac in bacs:
+
+
+
+        
         pass

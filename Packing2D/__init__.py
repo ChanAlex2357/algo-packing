@@ -81,7 +81,7 @@ def next_fit_decreasing_height(objects:list,rectangle:Rectangle2D=Rectangle2D(0,
         
     return objects
  
-def best_fit(width, height, objects:list):
+def best_fit(objects:list,rectangle:Rectangle2D=Rectangle2D(0,0,1280,720)):
     '''
         Algorithme de packing consistant a faire rentrer les objets (width*height) dans des bacs
         en laissant la moindre surface disponible dans le bac
@@ -95,8 +95,8 @@ def best_fit(width, height, objects:list):
     bacs = []
     # numero du bac actuel, initialisé a 1
     num_bac = 1
-    bacs.append(Bac2D(width,height,num_bac))
-
+    bacs.append(rectangle.generate_bac(objects[0].get_height(),num_bac))
+    cumul = 0
     for packing_object in objects:
         # Trier les bacs en fonction de la surface disponible
         bacs = sorted(bacs, key=lambda bac : bac.get_free_area(), reverse=False)
@@ -104,20 +104,26 @@ def best_fit(width, height, objects:list):
 
         for bac in bacs:
             try:
-                bac.add_object(packing_object)
+                bac.add_object(packing_object,fw=True)
                 added = True
+                cumul += packing_object.get_width()
+                print(f"num= {num_bac} ; {cumul}/{bac.get_width()}")
                 break
             except IncompatibleBacException:
                 added = False
 
-            if not added:
-                num_bac += 1
-                new_bac = Bac2D(width,height,num_bac)
-                try:
-                    new_bac.add_object(packing_object)
-                    bacs.append(new_bac)
-                except IncompatibleBacException:
-                    pass
+        if not added:
+            print('not added')
+            num_bac += 1
+            new_bac = rectangle.generate_bac(packing_object.get_height(),num_bac)
+            cumul = 0 
+            try:
+                new_bac.add_object(packing_object,fw=True)
+                bacs.append(new_bac)
+                cumul += packing_object.get_width()
+                print(f"num= {num_bac} ; {cumul}")
+            except IncompatibleBacException:
+                pass
     return bacs
 
 def first_fit_decreasing_height(width, height, objects):
