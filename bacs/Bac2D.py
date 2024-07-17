@@ -43,6 +43,7 @@ class Bac2D  (Bac) :
         if fw :
             reste_width = self.get_free_width() - obj.get_width()
             self.set_free_width(reste_width)
+            
     def reset_free_space(self):
         pass
 

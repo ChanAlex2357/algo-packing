@@ -148,3 +148,40 @@ def first_fit_decreasing_height(width, height, objects):
                 pass
     
     return bacs
+
+def brute_force(width, height, objects:list):
+    '''
+        Algorithme de packing consistant a faire rentrer les objets (width*height) dans des bacs
+        en laissant la moindre surface disponible dans le bac
+            - longueur des bacs
+            - hauteur des bacs
+            - listes des objets
+        RETURN:
+            - liste des bac utilisé 
+    '''
+    # liste des bacs
+    bacs = []
+    # numero du bac actuel, initialisé a 1
+    num_bac = 1
+    bacs.append(Bac2D(width,height,num_bac))
+
+    for packing_object in objects:
+        added = False
+
+        for bac in bacs:
+            try:
+                bac.add_object(packing_object,true,false)
+                added = True
+                break
+            except IncompatibleBacException:
+                added = False
+
+            if not added:
+                num_bac += 1
+                new_bac = Bac2D(width,height,num_bac)
+                try:
+                    new_bac.add_object(packing_object)
+                    bacs.append(new_bac)
+                except IncompatibleBacException:
+                    pass
+    return bacs
