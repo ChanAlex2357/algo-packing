@@ -81,7 +81,7 @@ class PackingApp:
     def init_object_form(self, root):
         # Frame for adding objects
         form_frame = tk.Frame(root)
-        form_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        form_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         # Forms for adding rectangle, circle, and triangle
         self.init_rectangle_form(form_frame)
@@ -100,6 +100,7 @@ class PackingApp:
 
         tk.Button(button_frame, text="Move Up", command=self.move_up).pack(side=tk.LEFT)
         tk.Button(button_frame, text="Move Down", command=self.move_down).pack(side=tk.LEFT)
+        tk.Button(button_frame, text="Suppr", command=self.remove_object).pack(side=tk.LEFT)
 
     def init_rectangle_form(self, parent):
         tk.Label(parent, text="Add Rectangle").pack()
@@ -273,3 +274,11 @@ class PackingApp:
                 self.objects[index], self.objects[index + 1] = self.objects[index + 1], self.objects[index]
                 self.update_treeview()
                 self.draw_shape()
+
+    def remove_object(self):
+        selected_item = self.tree.selection()
+        if selected_item:
+            index = self.tree.index(selected_item[0])
+            self.objects.remove( self.objects[index])
+            self.update_treeview()
+            self.draw_shape()
