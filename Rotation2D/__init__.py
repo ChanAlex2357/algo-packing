@@ -5,19 +5,19 @@ from objects.Triangle import Triangle
 from objects.Rectangle import Rectangle
 from objects.PackingObject2D import PackingObject2D
 
-def brute_force(objects, canvas_width, canvas_height,x=0,y=0):
+def brute_force(objects, canvas_width, canvas_height,last_x=0,last_y=0):
     placed_objects = []
     for obj in objects:
         placed = False
 
         if isinstance(obj,PackingObject2D):
             # teste chaque rotation 
-            for rotation in [(obj.width, obj.height), (obj.height, obj.width)]:
+            for rotation in [(obj.get_width(), obj.get_height()), (obj.get_height(), obj.get_width())]:
 
                 for x in range(canvas_width):
                     for y in range(canvas_height):
-                        obj.height = rotation[1]
-                        obj.width = rotation[0]
+                        obj.set_height(rotation[1])
+                        obj.set_width(rotation[0])
                         if obj.can_be_placed(placed_objects,x, y, canvas_width, canvas_height):
                             rect = Rectangle(rotation[0], rotation[1])
                             rect.set_coordinate(x,y)
@@ -31,11 +31,11 @@ def brute_force(objects, canvas_width, canvas_height,x=0,y=0):
 
         elif isinstance(obj, Triangle):
             # teste chaque rotation
-            for rotation in [(obj.base, obj.height), (obj.height, obj.base)]:
+            for rotation in [(obj.base, obj.get_height()), (obj.get_height(), obj.base)]:
                 for x in range(canvas_width):
                     for y in range(canvas_height):
-                        obj.height = rotation[1]
-                        obj.base = rotation[0]
+                        obj.set_height(rotation[1])
+                        obj.set_width(rotation[0])
                         if obj.can_be_placed(placed_objects, x, y, canvas_width, canvas_height):
                             triangle = Triangle(rotation[0], rotation[1])
                             triangle.set_coordinate(x,y)
@@ -68,23 +68,27 @@ def placer_objet(objects, bac_width, bac_height ,last_x=0,last_y=0):
     for obj in objects:
         placed = False
         if isinstance(obj,PackingObject2D):
-            for rotation in [(obj.width, obj.height), (obj.height, obj.width)]:
-                obj.width, obj.height = rotation
+            for rotation in [(obj.get_width(), obj.get_height()), (obj.get_height(), obj.get_width())]:
+                w,h = rotation
+                obj.set_width(w)
+                obj.set_height(h)
                 if obj.can_be_placed(placed_objects, last_x, last_y, bac_width, bac_height):
                     obj.set_coordinate(last_x, last_y)
                     placed_objects.append(obj)
-                    last_x += obj.width
+                    last_x += obj.get_width()
 
                     # check si il faut changer d'etage
                     if last_x >= bac_width:
                         last_x = 0
-                        last_y += obj.height
+                        last_y += obj.get_height()
                     placed = True
                     break
 
         elif isinstance(obj, Triangle):
-            for rotation in [(obj.base, obj.height), (obj.height, obj.base)]:
-                obj.base, obj.height = rotation
+            for rotation in [(obj.base, obj.get_height()), (obj.get_height(), obj.base)]:
+                w,h = rotation
+                obj.set_width(w)
+                obj.set_height(h)
                 if obj.can_be_placed(placed_objects, last_x, last_y, bac_width, bac_height):
                     obj.set_coordinate(last_x, last_y)
                     placed_objects.append(obj)
@@ -92,7 +96,7 @@ def placer_objet(objects, bac_width, bac_height ,last_x=0,last_y=0):
 
                     if last_x >= bac_width:
                         last_x = 0
-                        last_y += obj.height
+                        last_y += obj.get_height()
                     placed = True
                     break
         else:
@@ -110,10 +114,10 @@ def placer_objet(objects, bac_width, bac_height ,last_x=0,last_y=0):
 
         if not placed:
             print("Failed to place object:", obj)
-            last_x += obj.width
+            last_x += obj.get_width()
             if last_x >= bac_width:
                 last_x = 0
-                last_y += obj.height
+                last_y += obj.get_height()
     print("Finished")
 
     return placed_objects
