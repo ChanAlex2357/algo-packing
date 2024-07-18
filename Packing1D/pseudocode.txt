@@ -1,0 +1,186 @@
+procedure brute_force_1D(B: taille bac, objects: liste rectangle)
+    bacs <- tableau vide
+    num_bac <- 1
+    bacs.ajouter(nouveau bac (B, num_bac))
+
+    pour chaque object dans objects faire:
+        added <- faux
+        essayer:
+            bac <- bacs->dernier_element
+            bac->ajouter_element(object)
+            added <- vrai
+        attraper IncompatibleBacException:
+            added <- faux
+
+        si added est faux
+            num_bac <- num_bac + 1
+            new_bac <- nouveau bac(B, num_bac)
+            new_bac -> ajouter_element(object)
+            bacs->ajouter(new_bac)
+        fin si
+    fin boucle 
+    retourner bacs
+fin procedure 
+
+
+procedure brute_force_2D(width: largeur bac, height: hauteur bac, objects: liste de rectangle)
+    bacs <- tableau vide
+    num_bac <- 1
+    bacs.ajouter(nouveau bac (B, num_bac))
+
+    pour chaque object dans objects faire:
+        essayer:
+            bac <- bacs->dernier_element
+            bac->ajouter_element(object)
+        attraper IncompatibleBacException:
+            num_bac <- num_bac + 1
+            new_bac <- nouveau bac(width height, num_bac)
+            new_bac->ajouter_element(object)
+            bacs->ajouter(new_bac)
+    fin boucle
+    retourner bacs
+fin procedure
+
+
+procedure heuristique (objects: liste d'objets, bac_width: largeur bac, bac_height: hauteur bac, ref_x: emplacement x du bac , ref_y: emplacement y du bac)
+    last_x <- ref_x
+    last_y <- ref_y
+    placed_object <- tableau vide 
+    
+    pour chaque obj dans objects
+        placed <- faux
+        si obj instance de Triangle:
+            rotations <- [(obj->base, obj->hauteur), (obj->hauteur, obj->base)]
+            pour chaque rotation dans rotation
+                w,h <- rotation
+                obj->width <- w
+                obj->hauteur <- h
+                si obj peut etre placé sur last_x et last_y
+                    obj->coordonnee = last_x, last_y
+                    placed_object->ajouter(obj)
+                    last_x <- last_x + obj->base
+
+                    si last_x >= bac_width 
+                        last_x <- ref_x
+                        last_y <- obj->hauteur
+                    fin si 
+                    placed <- vrai
+                    terminer boucle
+                fin si
+        fin si 
+        si obj instance de Cercle  
+            si obj peut etre placé sur last_x et last_y    
+                obj->coordonnee <- last_x, last_y 
+                placed_object->ajouter(obj)
+                last_x <- last_x + obj->width
+
+                si last_x >= bac_width 
+                    last_x <- ref_x
+                    last_y <- obj->hauteur
+                fin si 
+                placed <- vrai
+                terminer boucle
+            fin si
+        fin si 
+        sinon
+            rotations <- [(obj->width, obj->hauteur), (obj->hauteur, obj->width)]
+            pour chaque rotation dans rotation
+                w,h <- rotation
+                obj->width <- w
+                obj->hauteur <- h
+                si obj peut etre placé sur last_x et last_y
+                    obj->coordonnee = last_x, last_y
+                    placed_object->ajouter(obj)
+                    last_x <- last_x + obj->base
+
+                    si last_x >= bac_width 
+                        last_x <- ref_x
+                        last_y <- obj->hauteur
+                    fin si 
+                    placed <- vrai
+                    terminer boucle
+                fin si
+        fin sinon
+        si placed est faux
+            last_x <- last_x + obj->width
+            si last_x >= bac_width
+                last_x <- ref_x
+                last_y <- obj->hauteur
+            fin si
+        fin si 
+    fin boucle
+    retourner placed_object
+fin procedure
+
+procedure brute_force_heuristique(objects: liste d'objets, bac_width: largeur bac, bac_height: hauteur bac, ref_x: emplacement x du bac , ref_y: emplacement y du bac)
+    last_x <- ref_x
+    last_y <- ref_y
+    placed_object <- tableau vide 
+    
+    pour chaque obj dans objects
+        placed <- faux
+        si obj instance de Triangle:
+            rotations <- [(obj->base, obj->hauteur), (obj->hauteur, obj->base)]
+            pour chaque rotation dans rotation
+                pour chaque x de last_x a bac_width
+                    pour chaque y de last_y a bac_height
+                        w,h <- rotation
+                        obj->width <- w
+                        obj->hauteur <- h
+                        si obj peut etre placé sur x et y
+                            obj->coordonnee = x, y
+                            placed_object->ajouter(obj)
+
+                            placed <- vrai
+                            terminer boucle
+                        fin si
+                    fin boucle
+                    si placed est vrai:
+                        terminer boucle
+                fin boucle
+                si placed est vrai:
+                    terminer boucle
+            fin boucle
+        fin si 
+        si obj instance de Cercle  
+            pour chaque x de last_x a bac_width
+                pour chaque y de last_y a bac_height
+                    si obj peut etre placé sur x et y    
+                        obj->coordonnee <- x, y 
+                        placed_object->ajouter(obj)
+        
+                        placed <- vrai
+                        terminer boucle
+                    fin si
+                fin boucle
+                si placed est vrai:
+                    terminer boucle
+            fin boucle
+        fin si 
+
+        sinon
+            rotations <- [(obj->width, obj->hauteur), (obj->hauteur, obj->width)]
+            pour chaque rotation dans rotation
+                pour chaque x de last_x a bac_width
+                    pour chaque y de last_y a bac_height
+                        w,h <- rotation
+                        obj->width <- w
+                        obj->hauteur <- h
+                        si obj peut etre placé sur last_x et last_y
+                            obj->coordonnee = x, y
+                            placed_object->ajouter(obj)
+                            
+                            placed <- vrai
+                            terminer boucle
+                        fin si
+                    fin boucle
+                    si placed est vrai
+                        terminer boucle
+                fin boucle
+                si placed est vrai:
+                    terminer boucle
+            fin boucle
+        fin sinon
+    fin boucle
+    retourner placed_object
+fin procedure
