@@ -21,7 +21,7 @@ class PackingApp:
 
     def init_entry(self):
         # Create a variable for the shape
-        self.shape_var = tk.StringVar(value="2D-BruteRotation")
+        self.shape_var = tk.StringVar(value="BruteHeu")
 
         # Create a dropdown (combobox) for selecting shapes
         self.shape_selector = ttk.Combobox(self.entry_frame, textvariable=self.shape_var)
@@ -213,6 +213,7 @@ class PackingApp:
             
 
     def add_rectangle(self):
+        self.canvas.create_oval()
         try:
             width = int(self.rect_width_entry.get())
             height = int(self.rect_height_entry.get())
