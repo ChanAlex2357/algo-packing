@@ -15,6 +15,10 @@ class PackingObject2D (PackingObject) :
         self._y = y
     def get_y(self):
         return self._y
+    def get_center_x(self):
+        return (self.get_x() + self.get_width()) // 2
+    def get_center_y(self):
+        return (self.get_y() + self.get_height()) // 2
 
     def set_coordinate(self,x:int,y:int):
         self.set_x(x)
@@ -31,6 +35,8 @@ class PackingObject2D (PackingObject) :
         x, y = self.get_coordinate()
         width, height = self.get_width(), self.get_height()
         canvas.create_rectangle(x, y, x + width, y + height, fill=color)
+        canvas.create_text(self.get_center_x(), self.get_center_y(), text=f"{width}x{height}", fill="white")
+
     def can_be_placed(self, list_objects, x, y, bac_width, bac_height):
         from objects.Cercle import Cercle
         from objects.Triangle import Triangle
