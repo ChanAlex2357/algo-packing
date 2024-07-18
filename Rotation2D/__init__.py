@@ -73,6 +73,10 @@ def placer_objet(objects, bac_width, bac_height ,ref_x=0,ref_y=0):
     last_y=ref_y
     placed_objects = []
     for obj in objects:
+        if last_x + obj.get_width() >= bac_width:
+            last_x = ref_x
+            objects_sorted = sorted(placed_objects, key=lambda obj: obj.get_height(), reverse=True)
+            last_y += objects_sorted[0].get_height()
         placed = False
         if isinstance(obj, Triangle):
             print(">>> Triangle")

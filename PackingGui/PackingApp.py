@@ -210,11 +210,7 @@ class PackingApp:
         except Exception:
             print(Exception)
 
-
-            
-
     def add_rectangle(self):
-        self.canvas.create_oval()
         try:
             width = int(self.rect_width_entry.get())
             height = int(self.rect_height_entry.get())
