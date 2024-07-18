@@ -77,26 +77,21 @@ class PackingApp:
         # Draw the rectangle
         self.canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2, outline='black', width=2)
         self.rectangle = Rectangle2D(rect_x1,rect_y1,rect_width,rect_height)
-    def init_object_form(self,root):
+    
+    def init_object_form(self, root):
         # Frame for adding objects
         form_frame = tk.Frame(root)
         form_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-        tk.Label(form_frame, text="Add Packing Object").pack()
+        # Forms for adding rectangle, circle, and triangle
+        self.init_rectangle_form(form_frame)
+        self.init_circle_form(form_frame)
+        self.init_triangle_form(form_frame)
 
-        tk.Label(form_frame, text="Width:").pack()
-        self.new_width_entry = tk.Entry(form_frame)
-        self.new_width_entry.pack()
-
-        tk.Label(form_frame, text="Height:").pack()
-        self.new_height_entry = tk.Entry(form_frame)
-        self.new_height_entry.pack()
-
-        tk.Button(form_frame, text="Add Object", command=self.add_object).pack()
         # Treeview to display the list of objects
-        self.tree = ttk.Treeview(form_frame, columns=("Width", "Height"), show='headings')
-        self.tree.heading("Width", text="Width")
-        self.tree.heading("Height", text="Height")
+        self.tree = ttk.Treeview(form_frame, columns=("Shape", "Size"), show='headings')
+        self.tree.heading("Shape", text="Shape")
+        self.tree.heading("Size", text="Size")
         self.tree.pack()
 
         # Buttons to change the order of the objects
@@ -105,6 +100,41 @@ class PackingApp:
 
         tk.Button(button_frame, text="Move Up", command=self.move_up).pack(side=tk.LEFT)
         tk.Button(button_frame, text="Move Down", command=self.move_down).pack(side=tk.LEFT)
+
+    def init_rectangle_form(self, parent):
+        tk.Label(parent, text="Add Rectangle").pack()
+
+        tk.Label(parent, text="Width:").pack()
+        self.rect_width_entry = tk.Entry(parent)
+        self.rect_width_entry.pack()
+
+        tk.Label(parent, text="Height:").pack()
+        self.rect_height_entry = tk.Entry(parent)
+        self.rect_height_entry.pack()
+
+        tk.Button(parent, text="Add Rectangle", command=self.add_rectangle).pack()
+
+    def init_circle_form(self, parent):
+        tk.Label(parent, text="Add Circle").pack()
+
+        tk.Label(parent, text="Radius:").pack()
+        self.circle_radius_entry = tk.Entry(parent)
+        self.circle_radius_entry.pack()
+
+        tk.Button(parent, text="Add Circle", command=self.add_circle).pack()
+
+    def init_triangle_form(self, parent):
+        tk.Label(parent, text="Add Triangle").pack()
+
+        tk.Label(parent, text="Base:").pack()
+        self.triangle_base_entry = tk.Entry(parent)
+        self.triangle_base_entry.pack()
+
+        tk.Label(parent, text="Height:").pack()
+        self.triangle_height_entry = tk.Entry(parent)
+        self.triangle_height_entry.pack()
+
+        tk.Button(parent, text="Add Triangle", command=self.add_triangle).pack()
 
     def show_objects(self , color:str='gray'):
         for obj in self.rectangle.get_objects():
@@ -156,16 +186,39 @@ class PackingApp:
 
             
 
-    def add_object(self):
+    def add_rectangle(self):
         try:
-            width = int(self.new_width_entry.get())
-            height = int(self.new_height_entry.get())
+            width = int(self.rect_width_entry.get())
+            height = int(self.rect_height_entry.get())
             new_object = PackingObject2D(width, height)
             self.objects.append(new_object)
             self.update_treeview()
             self.draw_shape()
         except ValueError:
             print("Invalid width or height")
+
+    def add_circle(self):
+        from objects.Cercle import Cercle
+        try:
+            radius = int(self.circle_radius_entry.get())
+            new_circle = Cercle(radius)
+            self.objects.append(new_circle)
+            self.update_treeview()
+            self.draw_shape()
+        except ValueError:
+            print("Invalid radius")
+
+    def add_triangle(self):
+        from objects.Triangle import Triangle
+        try:
+            base = int(self.triangle_base_entry.get())
+            height = int(self.triangle_height_entry.get())
+            new_triangle = Triangle(base, height)
+            self.objects.append(new_triangle)
+            self.update_treeview()
+            self.draw_shape()
+        except ValueError:
+            print("Invalid base or height")
 
     def update_treeview(self):
         # Clear the treeview
