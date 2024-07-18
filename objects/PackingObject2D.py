@@ -27,6 +27,7 @@ class PackingObject2D (PackingObject) :
         return ( self.get_x(),self.get_y() )
 
     def do_rotation(self):
+        print("rotated")
         temp = self.get_height()
         self.set_height(self.get_width())
         self.set_width(temp)
