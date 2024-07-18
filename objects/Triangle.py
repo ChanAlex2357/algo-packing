@@ -4,9 +4,9 @@ class Triangle (PackingObject2D):
         super().__init__(base,height)
         self.get_height()
 
-    def draw(self,canvas,color='pink'):
+    def draw(self,canvas,color='yellow'):
         x, y = self.get_coordinate()
-        base, height = self.get_base(), self.get_height()
+        base, height = self.get_width(), self.get_height()
         points = [x, y, x + base / 2, y - height, x - base / 2, y - height]
         canvas.create_polygon(points, fill=color)
         # self.canvas.create_text(x, y - height / 2, text=f"{base}x{height}", fill="white")

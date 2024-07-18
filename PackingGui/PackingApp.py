@@ -25,7 +25,7 @@ class PackingApp:
 
         # Create a dropdown (combobox) for selecting shapes
         self.shape_selector = ttk.Combobox(self.entry_frame, textvariable=self.shape_var)
-        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute","2D-BruteRotation")
+        self.shape_selector['values'] = ("2D-NFDH","2D-FFDH","2D-BF","2D-Brute","2D-BruteRotation","Heuristique","BruteHeu")
         self.shape_selector.pack()
         # Width entry
         tk.Label(self.entry_frame, text="Width:").pack(side=tk.LEFT)
@@ -136,8 +136,10 @@ class PackingApp:
 
         tk.Button(parent, text="Add Triangle", command=self.add_triangle).pack()
 
-    def show_objects(self , color:str='gray'):
-        for obj in self.rectangle.get_objects():
+    def show_objects(self,objects):
+        print("+++Printer+++")
+        for obj in objects:
+            print(obj)
             obj.draw(self.canvas)
             # print(f"Object at coordinates: {obj.get_coordinate()} with size ({obj.get_width()}x{obj.get_height()})")
 
@@ -161,25 +163,45 @@ class PackingApp:
                 self.rectangle.reset_objects()
                 # FFDH
                 pd2.first_fit_decreasing_height(self.objects, self.rectangle)
-                self.show_objects()
+                self.show_objects(self.rectangle.get_objects())
             
             elif shape == "2D-BF":
                 self.rectangle.reset_objects()
                 # Best Fit
                 pd2.best_fit(self.objects, self.rectangle)
-                self.show_objects()
+                self.show_objects(self.rectangle.get_objects())
             elif shape == "2D-Brute":
                 self.rectangle.reset_objects()
                 # Brute Force
                 bacs = pd2.brute_force(self.rectangle.get_width(),self.rectangle.get_height(),self.objects)
                 self.rectangle.load_objects_from_bacs(bacs)
-                self.show_objects()
+                self.show_objects(self.rectangle.get_objects())
             elif shape == "2D-BruteRotation":
                 self.rectangle.reset_objects()
                 # Brute Force
                 bacs = pd2.brute_force_with_rotation(self.rectangle.get_width(),self.rectangle.get_height(),self.objects)
                 self.rectangle.load_objects_from_bacs(bacs)
-                self.show_objects()
+                self.show_objects(self.rectangle.get_objects())
+            elif shape == "Heuristique":
+                import Rotation2D as rot2d
+                ordered = rot2d.placer_objet(
+                        self.objects,
+                        self.rectangle.get_width(),
+                        self.rectangle.get_height()
+                    )
+                self.show_objects(
+                    objects=ordered
+                )
+            elif shape == "BruteHeu":
+                import Rotation2D as rot2d
+                ordered = rot2d.brute_force(
+                        self.objects,
+                        self.rectangle.get_width(),
+                        self.rectangle.get_height()
+                )
+                self.show_objects(
+                    objects=ordered
+                )
         except Exception:
             print(Exception)
 

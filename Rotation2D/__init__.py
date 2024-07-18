@@ -5,7 +5,7 @@ from objects.Triangle import Triangle
 from objects.Rectangle import Rectangle
 from objects.PackingObject2D import PackingObject2D
 
-def brute_force(objects, canvas_width, canvas_height):
+def brute_force(objects, canvas_width, canvas_height,x=0,y=0):
     placed_objects = []
     for obj in objects:
         placed = False
@@ -18,7 +18,7 @@ def brute_force(objects, canvas_width, canvas_height):
                     for y in range(canvas_height):
                         obj.height = rotation[1]
                         obj.width = rotation[0]
-                        if obj.can_be_placed(placed_objects, x, y, canvas_width, canvas_height):
+                        if obj.can_be_placed(placed_objects,x, y, canvas_width, canvas_height):
                             rect = Rectangle(rotation[0], rotation[1])
                             rect.set_coordinate(x,y)
                             placed_objects.append(rect)
@@ -62,13 +62,11 @@ def brute_force(objects, canvas_width, canvas_height):
     return placed_objects
 
 
-def placer_objet(objects, bac_width, bac_height):
+def placer_objet(objects, bac_width, bac_height ,last_x=0,last_y=0):
     placed_objects = []
-    last_x, last_y = 0, 0
-
+    print("Heuristique")
     for obj in objects:
         placed = False
-
         if isinstance(obj,PackingObject2D):
             for rotation in [(obj.width, obj.height), (obj.height, obj.width)]:
                 obj.width, obj.height = rotation
@@ -116,6 +114,7 @@ def placer_objet(objects, bac_width, bac_height):
             if last_x >= bac_width:
                 last_x = 0
                 last_y += obj.height
+    print("Finished")
 
     return placed_objects
 
