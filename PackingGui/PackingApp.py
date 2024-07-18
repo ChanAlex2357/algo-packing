@@ -156,7 +156,7 @@ class PackingApp:
                 # print(f" -- {self.rectangle.get_width()} x {self.rectangle.get_height()} -- ")
                 # NFDH
                 pd2.next_fit_decreasing_height(self.objects, self.rectangle)
-                self.show_objects()
+                self.show_objects(self.rectangle.get_objects())
     
             # FIRST FIT DECREASING HEIGHT
             elif shape == "2D-FFDH":
@@ -187,7 +187,9 @@ class PackingApp:
                 ordered = rot2d.placer_objet(
                         self.objects,
                         self.rectangle.get_width(),
-                        self.rectangle.get_height()
+                        self.rectangle.get_height(),
+                        self.rectangle.get_x(),
+                        self.rectangle.get_y()
                     )
                 self.show_objects(
                     objects=ordered
@@ -197,7 +199,9 @@ class PackingApp:
                 ordered = rot2d.brute_force(
                         self.objects,
                         self.rectangle.get_width(),
-                        self.rectangle.get_height()
+                        self.rectangle.get_height(),
+                        self.rectangle.get_x(),
+                        self.rectangle.get_y()
                 )
                 self.show_objects(
                     objects=ordered

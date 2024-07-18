@@ -42,17 +42,17 @@ class PackingObject2D (PackingObject) :
         from objects.Triangle import Triangle
         if x < 0 or x + self.get_width() > bac_width or y < 0 or y + self.get_height() > bac_height:
             return False
-        for px, py, obj in list_objects:
+        for obj in list_objects:
+            px, py = obj.get_x() , obj.get_y()
             if isinstance(obj, Cercle):
-                if (px - obj.radius < x + self.get_width() and px + obj.radius > x and 
-                    py - obj.radius < y + self.get_height() and py + obj.radius > y):
+                if (px - obj.get_radius() < x + self.get_width() and px + obj.get_radius() > x and 
+                    py - obj.get_radius() < y + self.get_height() and py + obj.get_radius() > y):
                     return False
             elif isinstance(obj,PackingObject2D):
-                if (x < px + obj.width and x + self.get_width() > px and 
-                    y < py + obj.height and y + self.get_height() > py):
+                if (x < px + obj.get_width() and x + self.get_width() > px and y < py + obj.get_height() and y + self.get_height() > py):
                     return False
             elif isinstance(obj, Triangle):
-                if (x < px + obj.base/2 and x + self.get_width() > px - obj.base/2 and 
-                    y < py + obj.height and y + self.get_height() > py):
+                if (x < px + obj.get_base()/2 and x + self.get_width() > px - obj.get_base()/2 and 
+                    y < py + obj.get_height() and y + self.get_height() > py):
                     return False
         return True

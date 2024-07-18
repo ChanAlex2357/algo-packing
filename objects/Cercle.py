@@ -19,19 +19,20 @@ class Cercle(PackingObject2D):
 
     def can_be_placed(self, list_object, x, y, bac_width, bac_height):
         from objects.Triangle import Triangle
-        if x - self.radius < 0 or x + self.radius > bac_width or y - self.radius < 0 or y + self.radius > bac_height:
+        if x - self.get_radius() < 0 or x + self.get_radius() > bac_width or y - self.get_radius() < 0 or y + self.get_radius() > bac_height:
             return False
-        for px, py, obj in list_object:
+        for obj in list_object:
+            px, py = obj.get_x() , obj.get_y()
             if isinstance(obj, Cercle):
-                if math.hypot(px - x, py - y) < obj.radius + self.radius:
+                if math.hypot(px - x, py - y) < obj.radius + self.get_radius():
                     return False
             elif isinstance(obj, PackingObject2D):
-                if (x + self.radius > px and x - self.radius < px + obj.width and 
-                    y + self.radius > py and y - self.radius < py + obj.height):
+                if (x + self.get_radius() > px and x - self.get_radius() < px + obj.get_width() and 
+                    y + self.get_radius() > py and y - self.get_radius() < py + obj.get_height()):
                     return False
             elif isinstance(obj, Triangle):
-                if (x + self.radius > px - obj.base/2 and x - self.radius < px + obj.base/2 and 
-                    y + self.radius > py and y - self.radius < py + obj.height):
+                if (x + self.get_radius() > px - obj.get_base()/2 and x - self.get_radius() < px + obj.get_base()/2 and 
+                    y + self.get_radius() > py and y - self.get_radius() < py + obj.get_height()):
                     return False
         return True
         
