@@ -21,6 +21,7 @@ def worst_fit( B:int , objects:list):
     bacs.append(Bac1D(B,num_bac))
     for packing_object in objects:
         bacs = sorted(bacs,key=lambda bac : bac.get_free_space(),reverse=True)
+
         added = False
         for bac in bacs:
             try:
@@ -89,6 +90,7 @@ def best_fit(B: int, objects: list):
     bacs.append(Bac1D(B,num_bac))
     for packing_object in objects:
         bacs = sorted(bacs,key=lambda bac : bac.get_free_space(),reverse=False)
+
         added = False
         for bac in bacs:
             try:
